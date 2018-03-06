@@ -1,6 +1,6 @@
-import { Generic, Query, ClassName, ObjectId } from 'types/index'
+import { Generic, Query, ClassName, ObjectId } from '../../types/index'
 import RoleCore, { Obj, RollName } from './RoleCore'
-import ncmb from 'ncmb'
+import ncmb from '../../ncmb'
 import Create from './Create'
 import Update from './Update'
 

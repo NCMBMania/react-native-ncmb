@@ -1,5 +1,5 @@
-import ncmb, { CreateSignature } from 'ncmb'
-import * as jsSHA from 'jssha'
+import ncmb, { CreateSignature } from '../ncmb'
+jsSHA = require("jssha")
 import { convert } from './index'
 
 export default (ncmb: ncmb, options: CreateSignature) => {
@@ -11,7 +11,6 @@ export default (ncmb: ncmb, options: CreateSignature) => {
     getApplicationKey,
     getClientKey
   } = ncmb
-
   const sha256 = new jsSHA('SHA-256', 'TEXT')
 
   const signatureObject: { [key: string]: string | number } = {

@@ -1,3 +1,3 @@
 import NCMB from './dist/ncmb';
 
-export default new NCMB();
+export default NCMB;

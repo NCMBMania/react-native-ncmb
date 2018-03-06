@@ -1,5 +1,5 @@
-import { Generic, MailAddress } from 'types/index'
-import Core from 'lib/Core'
+import { Generic, MailAddress } from '../types/index'
+import Core from './Core'
 
 export default class User extends Core {
   login(query: Generic) {

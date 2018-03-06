@@ -1,4 +1,4 @@
-import { ObjectId } from 'types/index'
+import { ObjectId } from '../../types/index'
 import RoleCore, { Ids } from './RoleCore'
 
 export type Options = ObjectId & {

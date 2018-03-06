@@ -1,4 +1,5 @@
 node_modules/
 flow-typed/
 .vscode/
-index.html
+index.htmldist/
+dist/

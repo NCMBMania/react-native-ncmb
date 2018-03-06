@@ -7,7 +7,7 @@ export interface MailAddress {
 export interface Query {
   query: Generic
 }
-export interface ClassName {
+export interface IDataStore {
   className: string
 }
 export interface ObjectId {

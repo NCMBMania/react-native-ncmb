@@ -1,5 +1,5 @@
-import ncmb from 'ncmb'
-import { api } from 'utils/index'
+import ncmb from '../ncmb'
+import { api } from '../utils/index'
 
 export default abstract class Core {
   ncmb: ncmb

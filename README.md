@@ -14,16 +14,33 @@ yarn add react-native-ncmb
 
 #### set your initialPage
 
-```
+```js
 import NCMB from 'react-native-ncmb';
 
-NCMB.set({
-  applicationkey: 'abcdefghijklmnopqrstuvwxyz0123456789',
-  clientKey: 'abcdefghijklmnopqrstuvwxyz0123456789',
-});
+const applicationKey = 'YOUR_APPLICATION_KEY';
+const clientKey = 'YOUR_CLIENT_KEY';
+
+const ncmb = new NCMB(applicationKey, clientKey);
 ```
 
-# Use
+# Usage
+
+## DataStore
+
+### Create
+
+```js
+const Item = ncmb.DataStore('ReactNative');
+const item = Item.item();
+item
+    .set('msg', 'Hello World')
+    .set('test', 'Hoge')
+    .save()
+    .then((data) => {
+      console.log(data);
+      // -> DataStoreItem
+    })
+```
 
 ## [user Login](http://mb.cloud.nifty.com/doc/current/rest/user/userLogin.html)
 

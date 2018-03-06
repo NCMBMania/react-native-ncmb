@@ -1,6 +1,6 @@
 import ncmb from 'ncmb'
-import { api } from 'utils/index'
-import Core from 'lib/Core'
+import { api } from '../../utils/index'
+import Core from '../../lib/Core'
 
 export type Ids = string[]
 export interface RollName {
