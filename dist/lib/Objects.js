@@ -37,6 +37,7 @@ export default class Objects extends Core {
         });
     }
     delete(options) {
+        console.log('options', options);
         return this.ncmb.api({
             method: 'DELETE',
             endpoint: `classes/${options.className}/${options.objectId}`,
@@ -44,16 +45,16 @@ export default class Objects extends Core {
         });
     }
     search(options) {
+        console.log('options', options);
         const header = {
             query: {},
             method: 'GET',
             endpoint: `classes/${options.className}`,
             sessionToken: false
         };
-        if (options.query instanceof Object)
-            header.query = {
-                where: JSON.stringify(options.query)
-            };
+        if (options.where instanceof Object)
+            header.query.where = JSON.stringify(options.where);
+        header.query.limit = options.limit;
         return this.ncmb.api(header).then((res) => {
             return res.json();
         });

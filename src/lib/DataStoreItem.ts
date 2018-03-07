@@ -37,6 +37,32 @@ export default class DataStoreItem extends Objects {
     })
   }
   
+  update() {
+    let fields = this.fields()
+    const objectId = fields.objectId
+    delete fields.objectId
+    delete fields.createDate
+    delete fields.updateDate
+    return super.update({
+      objectId: objectId,
+      query: fields,
+      className: this.className      
+    })
+    .then((data) => {
+      return this.setFields(data)
+    })
+  }
+  
+  delete() {
+    return super.delete({
+      objectId: this.objectId,
+      className: this.className
+    })
+    .then((data) => {
+      return {}
+    })
+  }
+  
   fields() :object {
     const fields = {}
     for (let key in this) {
