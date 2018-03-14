@@ -3,6 +3,7 @@ import Objects from './lib/Objects';
 import Role from './lib/Role/index';
 import { signature, api } from './utils/index';
 import DataStore from './lib/DataStore';
+import Installation from './lib/Installation';
 export default class NCMB {
     constructor(applicationKey, clientKey, config) {
         this.applicationKey = null;
@@ -50,7 +51,10 @@ export default class NCMB {
             return api(this, options)().then((res) => {
                 if (res.ok)
                     return res;
-                throw new Error(res.statusText);
+                return res.json()
+                    .then((json) => {
+                    throw new Error(JSON.stringify(json));
+                });
             });
         };
         this.DataStore = (name) => {
@@ -69,6 +73,7 @@ export default class NCMB {
             this.protocol = config.protocol || this.protocol;
             this.stub = config.stub || this.stub;
         }
+        this.Installation = new Installation(this);
     }
     set(keys) {
         this.applicationKey = keys.applicationKey;

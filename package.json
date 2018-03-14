@@ -34,7 +34,9 @@
   },
   "dependencies": {
     "@types/jssha": "^0.0.29",
-    "jssha": "^2.2.0"
+    "jssha": "^2.2.0",
+    "react-native-device-info": "^0.17.3",
+    "react-native-push-notification": "^3.0.2"
   },
   "devDependencies": {
     "@types/jest": "^21.1.9",

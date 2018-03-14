@@ -42,6 +42,40 @@ item
     })
 ```
 
+## Push notification
+
+### Get token
+
+```js
+// senderId needs for Android
+ncmb.Installation.getDeviceToken(senderId)
+  .then((obj) => {
+    // Get token
+  }, (err) => {
+    console.log(err);
+  });
+```
+
+### Get & Set token
+
+```js
+// senderId needs for Android
+ncmb.Installation.setDeviceToken()
+  .then((obj) => {
+    // Token object from NCMB
+  }, (err) => {
+    console.log(err);
+  });
+```
+
+### Get notification
+
+```js
+ncmb.Installation.setHandler = (notification) => {
+  // Get notification object
+}
+```
+
 ## [user Login](http://mb.cloud.nifty.com/doc/current/rest/user/userLogin.html)
 
 ```

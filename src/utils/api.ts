@@ -19,7 +19,6 @@ export default (
     nowTime,
     query
   })
-
   const createFetchUrl = () => {
     let fetchUrl = `${ncmb.url}/${endpoint}`
     if (method === 'GET' && query instanceof Object) {
@@ -44,7 +43,6 @@ export default (
   const headers = createHeaders()
   const body =
     method === 'POST' || method === 'PUT' ? JSON.stringify(query) : null
-
   return async () => {
     return await fetch(createFetchUrl(), { method, headers, body })
   }

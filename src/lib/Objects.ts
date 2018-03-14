@@ -5,17 +5,28 @@ export interface Create extends Query, ClassName {}
 export interface Options extends Query, ClassName, ObjectId {}
 
 export default class Objects extends Core {
+  getEndpoint(className: string, objectId: string) {
+    let endpoint = ['users', 'roles', 'installations', 'files']
+      .indexOf(className) > -1 ? `${className}` : `classes/${className}`
+    if (objectId)
+      endpoint = `${endpoint}/${objectId}`
+    return endpoint
+  }
+  
   create(options: Create) {
     return this.ncmb
-    .api({
-      query: options.query,
-      method: 'POST',
-      endpoint: `classes/${options.className}/`,
-      sessionToken: false
-    })
-    .then((res: any) => {
-      return res.json()
-    })
+      .api({
+        query: options.query,
+        method: 'POST',
+        endpoint: this.getEndpoint(options.className),
+        sessionToken: false
+      })
+      .then((res: any) => {
+        return res.json()
+      })
+      .catch((err) => {
+        return new Error(err)
+      });
   }
   
   read(options: Options) {
@@ -23,7 +34,7 @@ export default class Objects extends Core {
     .api({
       query: options.query,
       method: 'GET',
-      endpoint: `classes/${options.className}/${options.objectId}`,
+      endpoint: this.getEndpoint(options.className, options.objectId),
       sessionToken: false
     })
     .then((res: any) => {
@@ -36,7 +47,7 @@ export default class Objects extends Core {
     .api({
       query: options.query,
       method: 'PUT',
-      endpoint: `classes/${options.className}/${options.objectId}`,
+      endpoint: this.getEndpoint(options.className, options.objectId),
       sessionToken: false
     })
     .then((res: any) => {
@@ -48,7 +59,7 @@ export default class Objects extends Core {
     console.log('options', options)
     return this.ncmb.api({
       method: 'DELETE',
-      endpoint: `classes/${options.className}/${options.objectId}`,
+      endpoint: this.getEndpoint(options.className, options.objectId),
       sessionToken: false
     })
   }
@@ -58,7 +69,7 @@ export default class Objects extends Core {
     const header = {
       query: {},
       method: 'GET',
-      endpoint: `classes/${options.className}`,
+      endpoint: this.getEndpoint(options.className),
       sessionToken: false
     }
     if (options.where instanceof Object)
