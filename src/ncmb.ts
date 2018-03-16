@@ -120,8 +120,13 @@ export default class NCMB {
     if (!name) {
       throw new Error('Please set the className')
     }
-    const dataStore = new DataStore(name, this)
-    return dataStore
+    return class Data extends DataStore {
+      static ncmb = this
+      constructor(fields?: object) {
+        super(Data.ncmb, fields)
+        this.className = name
+      }
+    }
   }
   
 }

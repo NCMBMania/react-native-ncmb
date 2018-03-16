@@ -1,6 +1,6 @@
 import Core from './Core';
 export default class Objects extends Core {
-    getEndpoint(className, objectId) {
+    static getEndpoint(className, objectId) {
         let endpoint = ['users', 'roles', 'installations', 'files']
             .indexOf(className) > -1 ? `${className}` : `classes/${className}`;
         if (objectId)
@@ -12,7 +12,7 @@ export default class Objects extends Core {
             .api({
             query: options.query,
             method: 'POST',
-            endpoint: this.getEndpoint(options.className),
+            endpoint: Objects.getEndpoint(options.className),
             sessionToken: false
         })
             .then((res) => {
@@ -25,7 +25,7 @@ export default class Objects extends Core {
             .api({
             query: options.query,
             method: 'GET',
-            endpoint: this.getEndpoint(options.className, options.objectId),
+            endpoint: Objects.getEndpoint(options.className, options.objectId),
             sessionToken: false
         })
             .then((res) => {
@@ -37,7 +37,7 @@ export default class Objects extends Core {
             .api({
             query: options.query,
             method: 'PUT',
-            endpoint: this.getEndpoint(options.className, options.objectId),
+            endpoint: Objects.getEndpoint(options.className, options.objectId),
             sessionToken: false
         })
             .then((res) => {
@@ -48,12 +48,11 @@ export default class Objects extends Core {
         console.log('options', options);
         return this.ncmb.api({
             method: 'DELETE',
-            endpoint: this.getEndpoint(options.className, options.objectId),
+            endpoint: Objects.getEndpoint(options.className, options.objectId),
             sessionToken: false
         });
     }
-    search(options) {
-        console.log('options', options);
+    static search(options) {
         const header = {
             query: {},
             method: 'GET',

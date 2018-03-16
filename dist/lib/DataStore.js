@@ -1,74 +1,101 @@
-import DataStoreItem from './DataStoreItem';
 import Objects from './Objects';
 export default class DataStore extends Objects {
-    constructor(className, ncmb) {
+    constructor(ncmb, fields) {
         super();
-        this.className = className;
         this.ncmb = ncmb;
-        this.query = {};
-        this.conditions = {
-            limit: 20
-        };
+        if (fields) {
+            this.setFields(fields);
+        }
     }
-    item(fields) {
-        return new DataStoreItem(this.className, this.ncmb, fields);
+    save() {
+        return this.create({
+            query: this.fields(),
+            className: this.className
+        })
+            .then((data) => {
+            return this.setFields(data);
+        });
     }
-    equalTo(key, value) {
+    update() {
+        let fields = this.fields();
+        const objectId = fields.objectId;
+        delete fields.objectId;
+        delete fields.createDate;
+        delete fields.updateDate;
+        return super.update({
+            objectId: objectId,
+            query: fields,
+            className: this.className
+        })
+            .then((data) => {
+            return this.setFields(data);
+        });
+    }
+    delete() {
+        return super.delete({
+            objectId: this.objectId,
+            className: this.className
+        })
+            .then((data) => {
+            return {};
+        });
+    }
+    static equalTo(key, value) {
         return this.setOperand(key, value);
     }
-    notEqualTo(key, value) {
+    static notEqualTo(key, value) {
         return this.setOperand(key, value, "$ne");
     }
-    lessThan(key, value) {
+    static lessThan(key, value) {
         return this.setOperand(key, value, "$lt");
     }
-    lessThanOrEqualTo(key, value) {
+    static lessThanOrEqualTo(key, value) {
         return this.setOperand(key, value, "$lte");
     }
-    greaterThan(key, value) {
+    static greaterThan(key, value) {
         return this.setOperand(key, value, "$gt");
     }
-    greaterThanOrEqualTo(key, value) {
+    static greaterThanOrEqualTo(key, value) {
         return this.setOperand(key, value, "$gte");
     }
-    in(key, values) {
+    static in(key, values) {
         if (!Array.isArray(values))
             throw new Error('Values must be array.');
         return this.setOperand(key, values, "$in");
     }
-    notIn(key, values) {
+    static notIn(key, values) {
         if (!Array.isArray(values))
             throw new Error('Values must be array.');
         return this.setOperand(key, values, "$nin");
     }
-    exists(key, exist) {
+    static exists(key, exist) {
         if (typeof exist === "undefined")
             exist = true;
         if (typeof exist !== "boolean")
             throw new Error('Exist must be boolean.');
         return this.setOperand(key, exist, "$exists");
     }
-    regularExpressionTo(key, regex) {
+    static regularExpressionTo(key, regex) {
         if (typeof regex !== "string")
             throw new Error('Regular expression must be string');
         return this.setOperand(key, regex, "$regex");
     }
-    inArray(key, values) {
+    static inArray(key, values) {
         if (!Array.isArray(values))
             values = [values];
         return this.setOperand(key, values, "$inArray");
     }
-    notInArray(key, values) {
+    static notInArray(key, values) {
         if (!Array.isArray(values))
             values = [values];
         return this.setOperand(key, values, "$ninArray");
     }
-    allInArray(key, values) {
+    static allInArray(key, values) {
         if (!Array.isArray(values))
             values = [values];
         return this.setOperand(key, values, "$all");
     }
-    setOperand(key, value, operand) {
+    static setOperand(key, value, operand) {
         if (typeof key !== "string") {
             throw new Error("Key must be string.");
         }
@@ -88,11 +115,11 @@ export default class DataStore extends Objects {
         this.query.where[key][operand] = value;
         return this;
     }
-    limit(number) {
+    static limit(number) {
         this.conditions.limit = number;
         return this;
     }
-    fetchAll() {
+    static fetchAll() {
         return this.search({
             where: this.query.where,
             limit: this.conditions.limit,
@@ -107,4 +134,6 @@ export default class DataStore extends Objects {
         });
     }
 }
+DataStore.query = {};
+DataStore.conditions = { limit: 20 };
 //# sourceMappingURL=DataStore.js.map

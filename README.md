@@ -31,7 +31,7 @@ const ncmb = new NCMB(applicationKey, clientKey);
 
 ```js
 const Item = ncmb.DataStore('ReactNative');
-const item = Item.item();
+const item = new Item;
 item
     .set('msg', 'Hello World')
     .set('test', 'Hoge')
@@ -46,7 +46,7 @@ item
 
 ```js
 const Item = ncmb.DataStore('ReactNative');
-const item = Item.item();
+const item = new Item();
 const acl = new ncmb.Acl();
 acl.setPublicReadAccess(true)
   .setPublicWriteAccess(true)
@@ -97,7 +97,7 @@ ncmb.Installation.setHandler = (notification) => {
 
 ## [user Login](http://mb.cloud.nifty.com/doc/current/rest/user/userLogin.html)
 
-```
+```js
 NCMB.User.login('user01', 'test1234')
 .then(user => {
   console.log(user)
@@ -108,7 +108,7 @@ NCMB.User.login('user01', 'test1234')
 
 ### result
 
-```
+```js
 User {
   "objectId":"09Mp23m4bEOInUqT",
   "userName":"user01",
@@ -124,7 +124,7 @@ User {
 
 ### Only after login
 
-```
+```js
 NCMB.User.logout()
 .then(response => {
   console.log(response)
@@ -135,11 +135,13 @@ NCMB.User.logout()
 
 ### result
 
+```js
 // type Promise
+```
 
 ## [Register User](http://mb.cloud.nifty.com/doc/current/rest/user/userRegistration.html)
 
-```
+```js
 const userName = 'reactTest';
 const password = 'reactTest';
 
@@ -157,7 +159,7 @@ user
 
 ### result
 
-```
+```js
 User {
   "createDate":"2013-08-28T11:27:16.446Z",
   "objectId":"epaKcaYZqsREdSMY",
@@ -171,7 +173,7 @@ User {
 
 #### Only after login
 
-```
+```js
 NCMB.User.read()
 .then(response => {
   console.log(response)
@@ -182,7 +184,7 @@ NCMB.User.read()
 
 ### result
 
-```
+```js
 {
   "objectId":"epaKcaYZqsREdSMY",
   "userName":"YamadaTarou",
@@ -204,7 +206,7 @@ NCMB.User.read()
 
 #### Only after login
 
-```
+```js
 NCMB.User.update({
   mailAddress: "new_address@mail"
   etc...
@@ -217,7 +219,7 @@ NCMB.User.update({
 
 ### result
 
-```
+```js
 {"updateDate":"2013-08-28T12:21:17.087Z"}
 ```
 
@@ -225,7 +227,7 @@ NCMB.User.update({
 
 #### Only after login
 
-```
+```js
 NCMB.User.delete()
 .then(response => {
   console.log(response)
@@ -236,13 +238,13 @@ NCMB.User.delete()
 
 ### result
 
-```
+```js
 // type Promise
 ```
 
 ## [Password Registration](http://mb.cloud.nifty.com/doc/current/rest/user/passwordRegistration.html)
 
-```
+```js
 NCMB.user.requestPasswordReset({
   mailAddress: 'test@gmail.com'
 }).then(response => {
@@ -261,7 +263,7 @@ NCMB.user.requestPasswordReset({
 
 ## [Request MailForUser Authenticaiton](http://mb.cloud.nifty.com/doc/current/rest/user/requestMailForUserAuthenticaiton.html)
 
-```
+```js
 NCMB.user.requestMailAddressUserEntry({
   mailAddress: 'test@gmail.com'
 }).then(response => {

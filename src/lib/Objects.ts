@@ -5,7 +5,7 @@ export interface Create extends Query, ClassName {}
 export interface Options extends Query, ClassName, ObjectId {}
 
 export default class Objects extends Core {
-  getEndpoint(className: string, objectId: string) {
+  static getEndpoint(className: string, objectId: string) {
     let endpoint = ['users', 'roles', 'installations', 'files']
       .indexOf(className) > -1 ? `${className}` : `classes/${className}`
     if (objectId)
@@ -18,7 +18,7 @@ export default class Objects extends Core {
       .api({
         query: options.query,
         method: 'POST',
-        endpoint: this.getEndpoint(options.className),
+        endpoint: Objects.getEndpoint(options.className),
         sessionToken: false
       })
       .then((res: any) => {
@@ -32,7 +32,7 @@ export default class Objects extends Core {
     .api({
       query: options.query,
       method: 'GET',
-      endpoint: this.getEndpoint(options.className, options.objectId),
+      endpoint: Objects.getEndpoint(options.className, options.objectId),
       sessionToken: false
     })
     .then((res: any) => {
@@ -45,7 +45,7 @@ export default class Objects extends Core {
     .api({
       query: options.query,
       method: 'PUT',
-      endpoint: this.getEndpoint(options.className, options.objectId),
+      endpoint: Objects.getEndpoint(options.className, options.objectId),
       sessionToken: false
     })
     .then((res: any) => {
@@ -57,13 +57,12 @@ export default class Objects extends Core {
     console.log('options', options)
     return this.ncmb.api({
       method: 'DELETE',
-      endpoint: this.getEndpoint(options.className, options.objectId),
+      endpoint: Objects.getEndpoint(options.className, options.objectId),
       sessionToken: false
     })
   }
   
-  search(options: Options) {
-    console.log('options', options)
+  static search(options: Options) {
     const header = {
       query: {},
       method: 'GET',

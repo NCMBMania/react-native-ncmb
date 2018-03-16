@@ -65,8 +65,15 @@ export default class NCMB {
             if (!name) {
                 throw new Error('Please set the className');
             }
-            const dataStore = new DataStore(name, this);
-            return dataStore;
+            return _a = class Data extends DataStore {
+                    constructor(fields) {
+                        super(Data.ncmb, fields);
+                        this.className = name;
+                    }
+                },
+                _a.ncmb = this,
+                _a;
+            var _a;
         };
         this.applicationKey = applicationKey;
         this.clientKey = clientKey;
