@@ -1,25 +1,37 @@
+import ncmb from '../ncmb'
 import { Generic, MailAddress } from '../types/index'
-import Core from './Core'
+import Objects from './Objects'
 
-export default class User extends Core {
-  login(query: Generic) {
+export default class User extends Objects {
+  public ncmb: ncmb
+  static className = 'users'
+  
+  constructor(fields? :object) {
+    super()
+    this.ncmb = User.ncmb
+    if (fields) {
+      this.setFields(fields)
+    }
+  }
+  
+  static login(userName, password) {
     return this.ncmb
       .api({
-        query,
+        query: {
+          userName: userName,
+          password: password
+        },
         method: 'GET',
         endpoint: 'login',
         sessionToken: false
       })
       .then((res: any) => {
-        return res.json()
-      })
-      .then((res: any) => {
         this.ncmb.setCurrentUser(res)
-        return res
-      })
+        return new this.ncmb.User(res)
+      }, err => throw err)
   }
 
-  logout() {
+  static logout() {
     return this.ncmb
       .api({
         method: 'GET',
@@ -30,25 +42,18 @@ export default class User extends Core {
         this.ncmb.deleteCurrentUser()
       })
   }
-
-  create(query: Generic) {
-    return this.ncmb
-      .api({
-        query,
-        method: 'POST',
-        endpoint: 'users',
-        sessionToken: false
-      })
-      .then(res => {
-        return res.json()
-      })
-      .then(json => {
-        this.ncmb.setCurrentUser(json)
-        return json
-      })
+  
+  signUpByAccount() {
+    return this.create({
+      query: this.fields(),
+      className: User.className
+    })
+    .then((data) => {
+      return this.setFields(data)
+    }, err => throw err)
   }
 
-  update(query: Generic) {
+  static update(query: Generic) {
     return this.ncmb
       .api({
         query,
@@ -61,7 +66,7 @@ export default class User extends Core {
       })
   }
 
-  read() {
+  fetch() {
     return this.ncmb
       .api({
         method: 'GET',
@@ -73,7 +78,7 @@ export default class User extends Core {
       })
   }
 
-  delete() {
+  static delete() {
     return this.ncmb
       .api({
         method: 'DELETE',
@@ -86,7 +91,7 @@ export default class User extends Core {
       })
   }
 
-  requestMailAddressUserEntry(query: MailAddress) {
+  static requestMailAddressUserEntry(query: MailAddress) {
     return this.ncmb
       .api({
         query,
@@ -99,7 +104,7 @@ export default class User extends Core {
       })
   }
 
-  requestPasswordReset(query: MailAddress) {
+  static requestPasswordReset(query: MailAddress) {
     return this.ncmb
       .api({
         query,

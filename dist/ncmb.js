@@ -4,6 +4,7 @@ import Role from './lib/Role/index';
 import { signature, api } from './utils/index';
 import DataStore from './lib/DataStore';
 import Installation from './lib/Installation';
+import Acl from './lib/Acl';
 export default class NCMB {
     constructor(applicationKey, clientKey, config) {
         this.applicationKey = null;
@@ -19,7 +20,6 @@ export default class NCMB {
         this.signatureVersion = 2;
         this.stub = false;
         this.url = `${this.protocol}//${this.fqdn}/${this.version}`;
-        this.user = new User(this);
         this.object = new Objects(this);
         this.role = new Role(this);
         this.setCurrentUser = (res) => {
@@ -48,13 +48,17 @@ export default class NCMB {
             return signature(this, options);
         };
         this.api = (options) => {
+            let status;
             return api(this, options)().then((res) => {
-                if (res.ok)
-                    return res;
-                return res.json()
-                    .then((json) => {
+                status = res.ok;
+                return res.json();
+            }).then((json) => {
+                if (status) {
+                    return json;
+                }
+                else {
                     throw new Error(JSON.stringify(json));
-                });
+                }
             });
         };
         this.DataStore = (name) => {
@@ -74,6 +78,10 @@ export default class NCMB {
             this.stub = config.stub || this.stub;
         }
         this.Installation = new Installation(this);
+        this.Acl = Acl;
+        Acl.ncmb = this;
+        this.User = User;
+        this.User.ncmb = this;
     }
     set(keys) {
         this.applicationKey = keys.applicationKey;

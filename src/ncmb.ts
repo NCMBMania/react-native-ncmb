@@ -5,6 +5,7 @@ import Role from './lib/Role/index'
 import { signature, api } from './utils/index'
 import DataStore from './lib/DataStore'
 import Installation from './lib/Installation'
+import Acl from './lib/Acl'
 
 export interface CreateSignature {
   method: string
@@ -47,7 +48,6 @@ export default class NCMB {
   stub = false
   url = `${this.protocol}//${this.fqdn}/${this.version}`
   
-  
   constructor(applicationKey: string, clientKey: string, config?: Config) {
     this.applicationKey = applicationKey
     this.clientKey = clientKey
@@ -59,9 +59,12 @@ export default class NCMB {
       this.stub = config.stub || this.stub
     }
     this.Installation = new Installation(this)
+    this.Acl = Acl
+    Acl.ncmb = this
+    this.User = User
+    this.User.ncmb = this
   }
   
-  user = new User(this)
   object = new Objects(this)
   role = new Role(this)
   
@@ -100,12 +103,16 @@ export default class NCMB {
   }
   
   api = (options: Api) => {
+    let status: boolean
     return api(this, options)().then((res: any) => {
-      if (res.ok) return res
+      status = res.ok
       return res.json()
-        .then((json) => {
-          throw new Error(JSON.stringify(json))
-        })
+    }).then((json) => {
+      if (status) {
+        return json
+      } else {
+        throw new Error(JSON.stringify(json))
+      }
     })
   }
   
@@ -116,4 +123,5 @@ export default class NCMB {
     const dataStore = new DataStore(name, this)
     return dataStore
   }
+  
 }

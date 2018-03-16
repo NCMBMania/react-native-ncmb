@@ -1,6 +1,5 @@
 import ncmb from '../ncmb'
 import { Generic } from '../types/index'
-import DataStoreItem from './DataStoreItem'
 import Objects from './Objects'
 const PushNotification = require('react-native-push-notification')
 const packageInfo = require('../../package')

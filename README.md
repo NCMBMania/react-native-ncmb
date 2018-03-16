@@ -12,7 +12,7 @@ yarn add react-native-ncmb
 
 ## Setting
 
-#### set your initialPage
+### set your initialPage
 
 ```js
 import NCMB from 'react-native-ncmb';
@@ -40,6 +40,25 @@ item
       console.log(data);
       // -> DataStoreItem
     })
+```
+
+## Create with ACL
+
+```js
+const Item = ncmb.DataStore('ReactNative');
+const item = Item.item();
+const acl = new ncmb.Acl();
+acl.setPublicReadAccess(true)
+  .setPublicWriteAccess(true)
+  .setRoleReadAccess('Pro', true)
+  .setUserReadAccess(user, true);
+item
+  .set('msg', 'Hello World')
+  .set('test', 'Hoge')
+  .set('acl', acl)
+  .save()
+  .then((data) => {
+  })
 ```
 
 ## Push notification
@@ -79,11 +98,9 @@ ncmb.Installation.setHandler = (notification) => {
 ## [user Login](http://mb.cloud.nifty.com/doc/current/rest/user/userLogin.html)
 
 ```
-NCMB.user.login({
-  userName: 'user01',
-  password: 'test1234'
-}).then(response => {
-  console.log(response)
+NCMB.User.login('user01', 'test1234')
+.then(user => {
+  console.log(user)
 }).catch(error => {
   // type Error
 });
@@ -92,7 +109,7 @@ NCMB.user.login({
 ### result
 
 ```
-{
+User {
   "objectId":"09Mp23m4bEOInUqT",
   "userName":"user01",
   "mailAddress":null,
@@ -108,7 +125,7 @@ NCMB.user.login({
 ### Only after login
 
 ```
-NCMB.user.logout()
+NCMB.User.logout()
 .then(response => {
   console.log(response)
 }).catch(error => {
@@ -120,24 +137,28 @@ NCMB.user.logout()
 
 // type Promise
 
-## [User Create](http://mb.cloud.nifty.com/doc/current/rest/user/userRegistration.html)
+## [Register User](http://mb.cloud.nifty.com/doc/current/rest/user/userRegistration.html)
 
 ```
-NCMB.user.create({
-  userName: 'user01',
-  password: 'test1234'
-})
-.then(response => {
-  console.log(response)
-}).catch(error => {
-  // type Error
-});
+const userName = 'reactTest';
+const password = 'reactTest';
+
+const user = new ncmb.User();
+user
+  .set('userName', userName)
+  .set('password', password)
+  .signUpByAccount()
+  .then((user) => {
+    console.log('user', user);
+  }, (err) => {
+    console.log(err)
+  })
 ```
 
 ### result
 
 ```
-{
+User {
   "createDate":"2013-08-28T11:27:16.446Z",
   "objectId":"epaKcaYZqsREdSMY",
   "sessionToken":"iXDIelJRY3ULBdms281VTmc5O",
@@ -151,7 +172,7 @@ NCMB.user.create({
 #### Only after login
 
 ```
-NCMB.user.read()
+NCMB.User.read()
 .then(response => {
   console.log(response)
 }).catch(error => {
@@ -184,7 +205,7 @@ NCMB.user.read()
 #### Only after login
 
 ```
-NCMB.user.update({
+NCMB.User.update({
   mailAddress: "new_address@mail"
   etc...
 }).then(response => {
@@ -205,7 +226,7 @@ NCMB.user.update({
 #### Only after login
 
 ```
-NCMB.user.delete()
+NCMB.User.delete()
 .then(response => {
   console.log(response)
 }).catch(error => {

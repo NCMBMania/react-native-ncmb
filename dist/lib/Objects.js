@@ -18,9 +18,7 @@ export default class Objects extends Core {
             .then((res) => {
             return res.json();
         })
-            .catch((err) => {
-            return new Error(err);
-        });
+            .catch(err => { throw err; });
     }
     read(options) {
         return this.ncmb
@@ -68,6 +66,26 @@ export default class Objects extends Core {
         return this.ncmb.api(header).then((res) => {
             return res.json();
         });
+    }
+    setFields(fields) {
+        for (let key in fields) {
+            this.set(key, fields[key]);
+        }
+        return this;
+    }
+    set(key, value) {
+        this[key] = value;
+        return this;
+    }
+    fields() {
+        const fields = {};
+        for (let key in this) {
+            if (['ncmb', 'className'].indexOf(key) > -1) {
+                continue;
+            }
+            fields[key] = this[key];
+        }
+        return fields;
     }
 }
 //# sourceMappingURL=Objects.js.map

@@ -1,22 +1,29 @@
-import Core from './Core';
-export default class User extends Core {
-    login(query) {
+import Objects from './Objects';
+export default class User extends Objects {
+    constructor(fields) {
+        super();
+        this.ncmb = User.ncmb;
+        if (fields) {
+            this.setFields(fields);
+        }
+    }
+    static login(userName, password) {
         return this.ncmb
             .api({
-            query,
+            query: {
+                userName: userName,
+                password: password
+            },
             method: 'GET',
             endpoint: 'login',
             sessionToken: false
         })
             .then((res) => {
-            return res.json();
-        })
-            .then((res) => {
             this.ncmb.setCurrentUser(res);
-            return res;
-        });
+            return new this.ncmb.User(res);
+        }, err => { throw err; });
     }
-    logout() {
+    static logout() {
         return this.ncmb
             .api({
             method: 'GET',
@@ -27,23 +34,16 @@ export default class User extends Core {
             this.ncmb.deleteCurrentUser();
         });
     }
-    create(query) {
-        return this.ncmb
-            .api({
-            query,
-            method: 'POST',
-            endpoint: 'users',
-            sessionToken: false
+    signUpByAccount() {
+        return this.create({
+            query: this.fields(),
+            className: User.className
         })
-            .then(res => {
-            return res.json();
-        })
-            .then(json => {
-            this.ncmb.setCurrentUser(json);
-            return json;
-        });
+            .then((data) => {
+            return this.setFields(data);
+        }, err => { throw err; });
     }
-    update(query) {
+    static update(query) {
         return this.ncmb
             .api({
             query,
@@ -55,7 +55,7 @@ export default class User extends Core {
             return res.json();
         });
     }
-    read() {
+    fetch() {
         return this.ncmb
             .api({
             method: 'GET',
@@ -66,7 +66,7 @@ export default class User extends Core {
             return res.json();
         });
     }
-    delete() {
+    static delete() {
         return this.ncmb
             .api({
             method: 'DELETE',
@@ -78,7 +78,7 @@ export default class User extends Core {
             return res;
         });
     }
-    requestMailAddressUserEntry(query) {
+    static requestMailAddressUserEntry(query) {
         return this.ncmb
             .api({
             query,
@@ -90,7 +90,7 @@ export default class User extends Core {
             return res.json();
         });
     }
-    requestPasswordReset(query) {
+    static requestPasswordReset(query) {
         return this.ncmb
             .api({
             query,
@@ -103,4 +103,5 @@ export default class User extends Core {
         });
     }
 }
+User.className = 'users';
 //# sourceMappingURL=User.js.map

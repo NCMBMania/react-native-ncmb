@@ -24,9 +24,7 @@ export default class Objects extends Core {
       .then((res: any) => {
         return res.json()
       })
-      .catch((err) => {
-        return new Error(err)
-      });
+      .catch(err => throw err)
   }
   
   read(options: Options) {
@@ -78,5 +76,28 @@ export default class Objects extends Core {
     return this.ncmb.api(header).then((res: any) => {
       return res.json()
     })
+  }
+
+  setFields(fields: object) {
+    for (let key in fields) {
+      this.set(key, fields[key])
+    }
+    return this
+  }
+  
+  set(key: string, value: any) {
+    this[key] = value
+    return this
+  }
+  
+  fields() :object {
+    const fields = {}
+    for (let key in this) {
+      if (['ncmb', 'className'].indexOf(key) > -1) {
+        continue;
+      }
+      fields[key] = this[key]
+    }
+    return fields
   }
 }

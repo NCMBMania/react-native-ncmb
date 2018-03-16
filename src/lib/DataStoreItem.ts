@@ -15,18 +15,6 @@ export default class DataStoreItem extends Objects {
     }
   }
 
-  setFields(fields: object) {
-    for (let key in fields) {
-      this.set(key, fields[key])
-    }
-    return this
-  }
-  
-  set(key: string, value: any) {
-    this[key] = value
-    return this
-  }
-  
   save() {
     return this.create({
       query: this.fields(),
@@ -63,14 +51,4 @@ export default class DataStoreItem extends Objects {
     })
   }
   
-  fields() :object {
-    const fields = {}
-    for (let key in this) {
-      if (['ncmb', 'className'].indexOf(key) > -1) {
-        continue;
-      }
-      fields[key] = this[key]
-    }
-    return fields
-  }
 }
